@@ -1,6 +1,6 @@
 query GetAllForumPosts {
     recent: Page(perPage: 10) {
-        threads(sort: [IS_STICKY, REPLIED_AT_DESC]) {
+        threads(sort: [REPLIED_AT_DESC]) {
             ...thread
         }
     }
@@ -28,12 +28,7 @@ fragment thread on Thread {
     }
     user {
         id name avatar {
-            large
-        }
-    }
-    replyUser {
-        id name avatar {
-            large
+            medium
         }
     }
 }
