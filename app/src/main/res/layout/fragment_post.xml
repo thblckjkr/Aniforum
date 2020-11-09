@@ -96,7 +96,9 @@
                     android:layout_margin="@dimen/activity_horizontal_margin"
                     android:layout_marginBottom="0dp"
                     android:layout_weight="1"
-                    android:text="@string/button_share" />
+                    android:backgroundTint="@color/blue_500"
+                    android:text="@string/button_share"
+                    app:icon="@drawable/share_white" />
             </LinearLayout>
         </LinearLayout>
 

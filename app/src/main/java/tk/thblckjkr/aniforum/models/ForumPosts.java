@@ -82,7 +82,7 @@ public class ForumPosts {
                         e.printStackTrace();
                     }
 
-                    Log.e("ApolloDataItem", "Processing item" + d.fragments().thread().id());
+                    Log.i("ApolloDataItem", "Processing item" + d.fragments().thread().id());
 
                     postsList.add( new Post(
                             d.fragments().thread().id(),

@@ -12,6 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Aniforum">
         <activity
+            android:name=".ui.post.ViewPostActivity"
+            android:label="@string/title_activity_view_post"
+            android:theme="@style/Theme.Aniforum.NoActionBar"></activity>
+        <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
             <intent-filter>

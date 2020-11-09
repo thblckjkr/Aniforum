@@ -2,6 +2,8 @@ package tk.thblckjkr.aniforum.ui.home;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -18,9 +20,10 @@ import com.koushikdutta.ion.Ion;
 import tk.thblckjkr.aniforum.R;
 import tk.thblckjkr.aniforum.models.ForumPosts;
 import tk.thblckjkr.aniforum.models.OnResult;
+import tk.thblckjkr.aniforum.ui.post.ViewPostActivity;
 
 public class ForumPostRecyclerViewAdapter extends RecyclerView.Adapter<ForumPostRecyclerViewAdapter.ViewHolder> {
-    private AdapterView.OnItemClickListener onItemClickListener;
+    private AdapterView.OnClickListener onClickListener;
 
     private ForumPosts mPosts;
 
@@ -44,6 +47,7 @@ public class ForumPostRecyclerViewAdapter extends RecyclerView.Adapter<ForumPost
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
 //        holder.mItem = mPosts.get(0).;
+
         String body = mPosts.posts().get(position).body;
         body = body.length() > 256 ? body.substring(0, 256) + "..." : body;
 
@@ -52,9 +56,6 @@ public class ForumPostRecyclerViewAdapter extends RecyclerView.Adapter<ForumPost
         holder.mPostUserView.setText("u/" + mPosts.posts().get(position).user.name);
 
         holder.mPostImage.setVisibility(View.GONE);
-        holder.mButtonView.setOnClickListener(v -> {
-            Log.e("A clicked button button", "Clicked");
-        });
 
         try {
             Ion.with(holder.mPostUserAvatar)
@@ -67,6 +68,27 @@ public class ForumPostRecyclerViewAdapter extends RecyclerView.Adapter<ForumPost
             // Catching exceptions is hard
         }
 
+        holder.mButtonView.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                final Intent intent;
+                Log.e("Click", "On click on view" + mPosts.posts().get(position).id);
+                intent =  new Intent(v.getContext(), ViewPostActivity.class);
+                v.getContext().startActivity(intent);
+            }
+        });
+
+        holder.mButtonShare.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+
+                String shareBody = "https://anilist.co/forum/thread/" + mPosts.posts().get(position).id;
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+
+                v.getContext().startActivity(Intent.createChooser(sharingIntent, "Share via"));
+            }
+        });
     }
 
     @Override
@@ -74,24 +96,44 @@ public class ForumPostRecyclerViewAdapter extends RecyclerView.Adapter<ForumPost
         return mPosts.posts().size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+//        public final View mView;
         public final TextView mPostTitleView;
         public final TextView mPostBodyView;
         public final TextView mPostUserView;
         public final ImageView mPostUserAvatar;
         public final ImageView mPostImage;
         public final Button mButtonView;
+        public final Button mButtonShare;
+
+        private final Context context;
 
         public ViewHolder(View view) {
             super(view);
-            mView = view;
+            context = view.getContext();
+
             mPostTitleView = (TextView) view.findViewById(R.id.post_title);
             mPostBodyView = (TextView) view.findViewById(R.id.post_body);
             mPostUserView = (TextView) view.findViewById(R.id.post_author);
             mPostImage = (ImageView) view.findViewById(R.id.post_image);
             mPostUserAvatar = (ImageView) view.findViewById(R.id.user_avatar);
             mButtonView = (Button) view.findViewById(R.id.post_view_button);
+            mButtonShare = (Button) view.findViewById(R.id.post_share_button);
+
+        }
+
+        @Override
+        public void onClick(View v) {
+            Log.e("Click", "On click on 1");
+            final Intent intent;
+            if (getAdapterPosition() == 0){
+                intent =  new Intent(context, ViewPostActivity.class);
+//            } else if (getPosition() == sth2){
+//                intent =  new Intent(context, SecondActivity.class);
+            } else {
+                intent =  new Intent(context, ViewPostActivity.class);
+            }
+            context.startActivity(intent);
         }
 
         @Override
