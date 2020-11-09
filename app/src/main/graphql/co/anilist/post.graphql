@@ -1,4 +1,4 @@
-query getForumPost($threadId: Int) {
+query getForumPost($threadId:Int!) {
   Thread(id: $threadId) {
     id
     title

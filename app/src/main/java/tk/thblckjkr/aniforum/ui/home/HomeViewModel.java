@@ -14,36 +14,16 @@ import com.apollographql.apollo.exception.ApolloException;
 
 import org.jetbrains.annotations.NotNull;
 
-import co.anilist.GetForumPostQuery;
+import co.anilist.GetAllForumPostsQuery;
 
 public class HomeViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
     public HomeViewModel() {
-        Input<Integer> input;
-        input = Input.fromNullable(11738);
-
-        ApolloClient apolloClient = ApolloClient.builder()
-            .serverUrl("https://anilist.co/graphql")
-            .build();
-
-        apolloClient.query(new GetForumPostQuery( input ) )
-        .enqueue(new ApolloCall.Callback<GetForumPostQuery.Data>() {
-            @Override
-            public void onResponse(@NotNull Response<GetForumPostQuery.Data> response) {
-//                Log.e("Apollo", "data" + response.getData().toString());
-            }
-
-            @Override
-            public void onFailure(@NotNull ApolloException e) {
-//                Log.e("Apollo", "Error", e);
-            }
-        });
-
-
         mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
+        mText.setValue("Loading");
+
     }
 
     public LiveData<String> getText() {
