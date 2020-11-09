@@ -2,8 +2,12 @@
     <string name="app_name">Aniforum</string>
     <string name="title_home">Aniforum</string>
     <string name="title_topics">Topics</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_user">User</string>
     <string name="button_view">View</string>
     <string name="button_share">Share</string>
     <string name="basic_image_description">An image description</string>
+
+    <string name="not_logged">You haven\'t logged in, do it to comment and post</string>
+    <string name="login">Log in</string>
+    <string name="register">Register</string>
 </resources>

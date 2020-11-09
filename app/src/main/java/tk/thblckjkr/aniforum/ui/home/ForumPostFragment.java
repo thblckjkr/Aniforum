@@ -8,22 +8,34 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+
+import tk.thblckjkr.aniforum.MainActivity;
 import tk.thblckjkr.aniforum.R;
 import tk.thblckjkr.aniforum.models.ForumPosts;
+import tk.thblckjkr.aniforum.models.OnResult;
+import tk.thblckjkr.aniforum.models.Post;
 
 /**
  * A fragment representing a list of Items.
  */
-public class ForumPostFragment extends Fragment {
-
-    // TODO: Customize parameter argument names
+public class ForumPostFragment extends Fragment  {
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
     private int mColumnCount = 1;
+
+    private ForumPostRecyclerViewAdapter mAdapter;
+    private RecyclerView mView;
+    private ForumPosts mPosts;
+
+    private final Handler mhandler = new Handler(Looper.getMainLooper());
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -58,18 +70,35 @@ public class ForumPostFragment extends Fragment {
 
         // Set the adapter
         if (view instanceof RecyclerView) {
+
             Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+            mView = (RecyclerView) view;
             if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                mView.setLayoutManager(new LinearLayoutManager(context));
             } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+                mView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
 
-            ForumPosts items = ForumPosts.get(context);
-            items.loadPosts();
-            recyclerView.setAdapter(new ForumPostRecyclerViewAdapter(items));
+            mPosts = ForumPosts.get(context);
+            updateUI();
+
+            mPosts.loadPosts( mAdapter, mhandler );
         }
+
         return view;
     }
+
+    public void updateUI() {
+        Context context = mView.getContext();
+        mPosts = ForumPosts.get(context);
+
+        if (mAdapter == null) {
+            mAdapter = new ForumPostRecyclerViewAdapter(mPosts);
+            mView.setAdapter(mAdapter);
+        } else {
+            mAdapter.setPosts(mPosts);
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
 }

@@ -4,9 +4,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,19 +17,27 @@ import com.koushikdutta.ion.Ion;
 
 import tk.thblckjkr.aniforum.R;
 import tk.thblckjkr.aniforum.models.ForumPosts;
+import tk.thblckjkr.aniforum.models.OnResult;
 
 public class ForumPostRecyclerViewAdapter extends RecyclerView.Adapter<ForumPostRecyclerViewAdapter.ViewHolder> {
+    private AdapterView.OnItemClickListener onItemClickListener;
 
-    private final ForumPosts mPosts;
+    private ForumPosts mPosts;
 
     public ForumPostRecyclerViewAdapter(ForumPosts items) {
         mPosts = items;
+        ForumPostRecyclerViewAdapter adapter = this;
+    }
+
+    public void setPosts(ForumPosts posts) {
+        mPosts = posts;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_post, parent, false);
+
         return new ViewHolder(view);
     }
 
@@ -41,6 +52,9 @@ public class ForumPostRecyclerViewAdapter extends RecyclerView.Adapter<ForumPost
         holder.mPostUserView.setText("u/" + mPosts.posts().get(position).user.name);
 
         holder.mPostImage.setVisibility(View.GONE);
+        holder.mButtonView.setOnClickListener(v -> {
+            Log.e("A clicked button button", "Clicked");
+        });
 
         try {
             Ion.with(holder.mPostUserAvatar)
@@ -50,8 +64,9 @@ public class ForumPostRecyclerViewAdapter extends RecyclerView.Adapter<ForumPost
 //                .animateIn(fadeInAnimation)
                     .load(mPosts.posts().get(position).user.avatar.medium());
         }catch (Exception e) {
-
+            // Catching exceptions is hard
         }
+
     }
 
     @Override
@@ -66,6 +81,7 @@ public class ForumPostRecyclerViewAdapter extends RecyclerView.Adapter<ForumPost
         public final TextView mPostUserView;
         public final ImageView mPostUserAvatar;
         public final ImageView mPostImage;
+        public final Button mButtonView;
 
         public ViewHolder(View view) {
             super(view);
@@ -75,11 +91,13 @@ public class ForumPostRecyclerViewAdapter extends RecyclerView.Adapter<ForumPost
             mPostUserView = (TextView) view.findViewById(R.id.post_author);
             mPostImage = (ImageView) view.findViewById(R.id.post_image);
             mPostUserAvatar = (ImageView) view.findViewById(R.id.user_avatar);
+            mButtonView = (Button) view.findViewById(R.id.post_view_button);
         }
 
         @Override
         public String toString() {
             return mPostBodyView.getText().toString();
         }
+
     }
 }

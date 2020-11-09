@@ -12,14 +12,14 @@
         tools:layout="@layout/fragment_post_list" />
 
     <fragment
-        android:id="@+id/navigation_posts"
+        android:id="@+id/navigation_topics"
         android:name="tk.thblckjkr.aniforum.ui.dashboard.DashboardFragment"
         android:label="@string/title_topics"
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="tk.thblckjkr.aniforum.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_user"
+        android:name="tk.thblckjkr.aniforum.ui.logins.UserFragment"
+        android:label="@string/title_user"
+        tools:layout="@layout/fragment_user" />
 </navigation>
