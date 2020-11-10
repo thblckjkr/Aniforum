@@ -12,6 +12,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
+import tk.thblckjkr.aniforum.MainActivity;
 import tk.thblckjkr.aniforum.R;
 
 public class ViewPostActivity extends AppCompatActivity {
@@ -25,10 +26,19 @@ public class ViewPostActivity extends AppCompatActivity {
         postId = b.getInt("postId");
 
         setContentView(R.layout.activity_view_post);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.viewpost_toolbar);
         setSupportActionBar(toolbar);
 
         Log.e("Intent received", "IUD = " + postId);
+
+        toolbar.setNavigationIcon(R.drawable.abc_vector_test);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            }
+        });
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

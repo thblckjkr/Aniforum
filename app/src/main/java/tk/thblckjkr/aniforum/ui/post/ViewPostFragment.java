@@ -1,17 +1,14 @@
 package tk.thblckjkr.aniforum.ui.post;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +17,12 @@ import android.widget.TextView;
 
 import com.koushikdutta.ion.Ion;
 
+import io.noties.markwon.AbstractMarkwonPlugin;
+import io.noties.markwon.Markwon;
+import io.noties.markwon.MarkwonConfiguration;
+import io.noties.markwon.core.MarkwonTheme;
+import io.noties.markwon.image.AsyncDrawableLoader;
+import io.noties.markwon.image.ImagesPlugin;
 import tk.thblckjkr.aniforum.R;
 import tk.thblckjkr.aniforum.models.ForumPostComments;
 
@@ -46,16 +49,6 @@ public class ViewPostFragment extends Fragment {
         Context context = mView.getContext();
         mComments = ForumPostComments.get(context);
         mComments.loadComments( activity.postId, this, mHandler);
-
-//        mComments.loadComments( activity.postId, null, mHandler );
-
-//        view.findViewById(R.id.).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                NavHostFragment.findNavController(ViewPostFragment.this)
-//                        .navigate(R.id.action_FirstFragment_to_SecondFragment);
-//            }
-//        });
     }
 
     public void setComments(ForumPostComments comments) {
@@ -64,8 +57,28 @@ public class ViewPostFragment extends Fragment {
     }
 
     public void updateUI(){
+        Context context = mView.getContext();
+        final Markwon markwon = Markwon.builder(context)
+            .usePlugin(new AbstractMarkwonPlugin() {
+                @Override
+                public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
+                    builder.asyncDrawableLoader(AsyncDrawableLoader.noOp());
+                }
+            })
+            .usePlugin(ImagesPlugin.create())
+            .usePlugin(new AbstractMarkwonPlugin() {
+                @Override
+                public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
+                    builder
+                        .linkColor(Color.WHITE)
+                        .codeTextColor(Color.BLACK)
+                        .codeBackgroundColor(Color.LTGRAY);
+                }
+            })
+            .build();
+
         TextView post = (TextView)mView.findViewById(R.id.post_body_viewComments);
-        post.setText(mComments.post.body);
+        markwon.setMarkdown(post, mComments.post.body);
 
         TextView title = (TextView)mView.findViewById(R.id.post_title_viewComments);
         title.setText(mComments.post.title);
@@ -79,8 +92,6 @@ public class ViewPostFragment extends Fragment {
             Ion.with(avatar)
                     .placeholder(R.drawable.hourglass_empty)
                     .error(R.drawable.broken_image)
-//                .animateLoad(  )
-//                .animateIn(fadeInAnimation)
                     .load(mComments.post.user.avatarSrc);
         }catch (Exception e) {
             // Catching exceptions is hard

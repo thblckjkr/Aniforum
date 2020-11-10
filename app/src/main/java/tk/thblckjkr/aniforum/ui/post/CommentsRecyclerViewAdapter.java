@@ -1,11 +1,13 @@
 package tk.thblckjkr.aniforum.ui.post;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +20,10 @@ import android.widget.TextView;
 
 import com.koushikdutta.ion.Ion;
 
+import io.noties.markwon.AbstractMarkwonPlugin;
+import io.noties.markwon.Markwon;
+import io.noties.markwon.core.MarkwonTheme;
+import io.noties.markwon.image.ImagesPlugin;
 import tk.thblckjkr.aniforum.R;
 import tk.thblckjkr.aniforum.models.ForumPostComments;
 import tk.thblckjkr.aniforum.models.ForumPosts;
@@ -48,15 +54,24 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<CommentsRe
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-//        String body = mComments.comments().get(position).body;
-//        body = body.length() > 256 ? body.substring(0, 256) + "..." : body;
-//
-        holder.mPostComment.setText(mComments.comments().get(position).comment);
-        holder.mPostUserAuthor.setText(mComments.comments().get(position).user.name);
-//        holder.mPostBodyView.setText(body);
-//        holder.mPostUserView.setText("u/" + mComments.comments().get(position).user.name);
-//
-//        holder.mPostImage.setVisibility(View.GONE);
+        holder.mPostUserAuthor.setText("@" + mComments.comments().get(position).user.name);
+
+        Context context = holder.itemView.getContext();
+
+        final Markwon markwon = Markwon.builder(context)
+        .usePlugin(ImagesPlugin.create())
+        .usePlugin(new AbstractMarkwonPlugin() {
+            @Override
+            public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
+                builder
+                    .linkColor(Color.BLACK)
+                    .codeTextColor(Color.BLACK)
+                    .codeBackgroundColor(Color.LTGRAY);
+            }
+        })
+        .build();
+
+        markwon.setMarkdown(holder.mPostComment, mComments.comments().get(position).comment);
     }
 
     @Override
@@ -77,10 +92,6 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<CommentsRe
 
             mPostComment = (TextView) view.findViewById(R.id.textComment);
             mPostUserAuthor = (TextView) view.findViewById(R.id.textCommentAuthor);
-
-//            mButtonView = (Button) view.findViewById(R.id.post_view_button);
-//            mButtonShare = (Button) view.findViewById(R.id.post_share_button);
-
         }
 
         @Override

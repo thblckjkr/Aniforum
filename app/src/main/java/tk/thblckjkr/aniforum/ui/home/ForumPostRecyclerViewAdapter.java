@@ -50,7 +50,7 @@ public class ForumPostRecyclerViewAdapter extends RecyclerView.Adapter<ForumPost
 
         holder.mPostTitleView.setText(mPosts.posts().get(position).title);
         holder.mPostBodyView.setText(body);
-        holder.mPostUserView.setText("u/" + mPosts.posts().get(position).user.name);
+        holder.mPostUserView.setText("@" + mPosts.posts().get(position).user.name);
 
         holder.mPostImage.setVisibility(View.GONE);
 

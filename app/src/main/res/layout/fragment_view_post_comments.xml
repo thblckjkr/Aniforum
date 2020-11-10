@@ -7,6 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="0dp"
+    android:nestedScrollingEnabled="false"
     app:layoutManager="LinearLayoutManager"
     tools:context=".ui.post.CommentsFragment"
     tools:listitem="@layout/fragment_post_comment" />

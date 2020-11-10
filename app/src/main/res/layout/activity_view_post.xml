@@ -12,11 +12,13 @@
         android:theme="@style/Theme.Aniforum.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+            android:id="@+id/viewpost_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/Theme.Aniforum.PopupOverlay" />
+            app:navigationIcon="@drawable/abc_vector_test"
+            app:popupTheme="@style/Theme.Aniforum.PopupOverlay"
+            app:title="View post"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 

@@ -28,7 +28,7 @@ query getForumPost($threadId:Int!, $page:Int!) {
       format
     }
   }
-  Page(page: $page, perPage: 15) {
+  Page(page: $page, perPage: 30) {
     pageInfo {
       total perPage currentPage lastPage hasNextPage
     }
