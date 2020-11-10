@@ -12,6 +12,7 @@ public class Post {
     public int viewCount;
     public Date createdAt;
     public List<Category> categories;
+    public String shareText;
 
     Post (int id, String title, String body, User user, int replyCount,
           int viewCount, Date createdAt, List<Category> categories){
@@ -22,5 +23,7 @@ public class Post {
         this.replyCount = replyCount;
         this.viewCount = viewCount;
         this.createdAt = createdAt;
+
+        this.shareText = "Look at this thing! \n " + title + "\n https://anilist.co/forum/thread/" + id;
     }
 }

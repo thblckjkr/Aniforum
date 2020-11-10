@@ -37,11 +37,13 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/post_title"
+                        android:id="@+id/post_title_viewComments"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/text_margin"
+                        android:foregroundTint="@color/white"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="@color/white"
                         android:visibility="visible" />
 
                     <TextView
@@ -52,6 +54,7 @@
                         android:layout_marginEnd="@dimen/text_margin"
                         android:layout_marginBottom="@dimen/text_margin"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        android:textColor="@color/white"
                         android:visibility="visible"
                         tools:visibility="visible" />
                 </LinearLayout>
@@ -62,7 +65,8 @@
                 android:id="@+id/post_body_viewComments"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/text_margin" />
+                android:layout_margin="@dimen/text_margin"
+                android:textColor="@color/white" />
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

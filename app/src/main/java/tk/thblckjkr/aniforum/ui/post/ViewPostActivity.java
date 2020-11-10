@@ -1,5 +1,6 @@
 package tk.thblckjkr.aniforum.ui.post;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -29,13 +30,22 @@ public class ViewPostActivity extends AppCompatActivity {
 
         Log.e("Intent received", "IUD = " + postId);
 
-//        FloatingActionButton fab = findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Look at this post on the Anilist Forum!");
+                String shareBody = "Look at this thing! \n " + "\n https://anilist.co/forum/thread/" + postId;
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody );
+
+                view.getContext().startActivity(Intent.createChooser(sharingIntent, "Share via"));
+
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
-//            }
-//        });
+            }
+        });
     }
 }

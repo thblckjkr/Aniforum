@@ -68,10 +68,9 @@ public class ForumPostRecyclerViewAdapter extends RecyclerView.Adapter<ForumPost
         holder.mButtonView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 final Intent intent;
-//                Log.e("Click", "On click on view" + mPosts.posts().get(position).id);
 
                 intent =  new Intent(v.getContext(), ViewPostActivity.class);
-                intent.putExtra("postId", mPosts.posts().get(position).id); //Your id
+                intent.putExtra("postId", mPosts.posts().get(position).id);
 
                 v.getContext().startActivity(intent);
             }
@@ -82,9 +81,8 @@ public class ForumPostRecyclerViewAdapter extends RecyclerView.Adapter<ForumPost
                 Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                 sharingIntent.setType("text/plain");
 
-                String shareBody = "https://anilist.co/forum/thread/" + mPosts.posts().get(position).id;
-                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
-                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Look at this post on the Anilist Forum!");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, mPosts.posts().get(position).shareText);
 
                 v.getContext().startActivity(Intent.createChooser(sharingIntent, "Share via"));
             }
