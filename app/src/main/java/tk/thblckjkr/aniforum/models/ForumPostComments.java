@@ -26,6 +26,7 @@ import co.anilist.GetForumPostQuery;
 import tk.thblckjkr.aniforum.R;
 import tk.thblckjkr.aniforum.ui.home.ForumPostRecyclerViewAdapter;
 import tk.thblckjkr.aniforum.ui.post.CommentsRecyclerViewAdapter;
+import tk.thblckjkr.aniforum.ui.post.ViewPostFragment;
 
 public class ForumPostComments {
     private static ForumPostComments sForumComments;
@@ -65,6 +66,56 @@ public class ForumPostComments {
                 .build();
 
         apolloClient.query( new GetForumPostQuery( postId,1 ) )
+            .enqueue(new ApolloCallback<>(new ApolloCall.Callback<GetForumPostQuery.Data>() {
+                @RequiresApi(api = Build.VERSION_CODES.N)
+                @Override
+                public void onResponse(@NotNull Response<GetForumPostQuery.Data> response) {
+                    User user = new User(
+                            response.data().Thread().user().id(),
+                            response.data().Thread().user().name(),
+                            response.data().Thread().user().avatar()
+                    );
+
+                    List<Category> categories = new ArrayList<Category>();
+
+                    post = new Post(
+                            response.data().Thread().id(),
+                            response.data().Thread().title(),
+                            response.data().Thread().body(),
+                            user,
+                            response.data().Thread().replyCount(),
+                            response.data().Thread().viewCount(),
+                            null,
+                            categories
+                    );
+
+                    response.data().Page().threadComments().forEach( (d)-> {
+                        Log.i("ApolloDataItem", "Comment received" + d.comment());
+                        commentsList.add( new Comment(d) );
+                    });
+
+                    Log.e("ApolloData", "Data received");
+
+                    adapter.setComments(sForumComments);
+                    adapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onFailure(@NotNull ApolloException e) {
+                    Log.e("Apollo", "Error", e);
+                }
+            }, uiHandler));
+    }
+
+    public void loadComments(int postId, ViewPostFragment fragment, Handler uiHandler) {
+        // clear all loaded posts before loading new ones
+        commentsList.clear();
+
+        ApolloClient apolloClient = ApolloClient.builder()
+                .serverUrl("https://graphql.anilist.co/")
+                .build();
+
+        apolloClient.query( new GetForumPostQuery( postId,1 ) )
                 .enqueue(new ApolloCallback<>(new ApolloCall.Callback<GetForumPostQuery.Data>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
@@ -95,9 +146,7 @@ public class ForumPostComments {
 
                         Log.e("ApolloData", "Data received");
 
-                        adapter.setComments(sForumComments);
-                        adapter.notifyDataSetChanged();
-
+                        fragment.setComments(sForumComments);
                     }
 
                     @Override

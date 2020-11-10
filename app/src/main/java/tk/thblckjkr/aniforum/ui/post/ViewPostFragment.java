@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import tk.thblckjkr.aniforum.models.ForumPostComments;
 public class ViewPostFragment extends Fragment {
     private final Handler mHandler = new Handler(Looper.getMainLooper());
     private ForumPostComments mComments;
+    View mView;
 
     @Override
     public View onCreateView(
@@ -33,11 +35,14 @@ public class ViewPostFragment extends Fragment {
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-//        int fragment = getArguments().getInt("postId", 1);
-        ViewPostActivity activity = (ViewPostActivity)getActivity();
-
         super.onViewCreated(view, savedInstanceState);
 
+        ViewPostActivity activity = (ViewPostActivity)getActivity();
+        mView = view;
+
+        Context context = mView.getContext();
+        mComments = ForumPostComments.get(context);
+        mComments.loadComments( activity.postId, this, mHandler);
 
 //        mComments.loadComments( activity.postId, null, mHandler );
 
@@ -52,9 +57,11 @@ public class ViewPostFragment extends Fragment {
 
     public void setComments(ForumPostComments comments) {
         mComments = comments;
+        updateUI();
     }
 
     public void updateUI(){
-
+        TextView post = (TextView)mView.findViewById(R.id.post_body_viewComments);
+        post.setText(mComments.post.body);
     }
 }
