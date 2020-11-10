@@ -15,7 +15,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.koushikdutta.ion.Ion;
 
 import tk.thblckjkr.aniforum.R;
 import tk.thblckjkr.aniforum.models.ForumPostComments;
@@ -63,5 +66,26 @@ public class ViewPostFragment extends Fragment {
     public void updateUI(){
         TextView post = (TextView)mView.findViewById(R.id.post_body_viewComments);
         post.setText(mComments.post.body);
+
+        TextView title = (TextView)mView.findViewById(R.id.post_title_viewComments);
+        title.setText(mComments.post.title);
+
+        TextView author = (TextView)mView.findViewById(R.id.post_author_viewComments);
+        author.setText(mComments.post.user.name);
+
+        ImageView avatar = (ImageView) mView.findViewById(R.id.user_avatar_viewComments);
+
+        try {
+            Ion.with(avatar)
+                    .placeholder(R.drawable.hourglass_empty)
+                    .error(R.drawable.broken_image)
+//                .animateLoad(  )
+//                .animateIn(fadeInAnimation)
+                    .load(mComments.post.user.avatarSrc);
+        }catch (Exception e) {
+            // Catching exceptions is hard
+        }
+
+
     }
 }
