@@ -4,8 +4,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +17,6 @@ import com.koushikdutta.ion.Ion;
 
 import tk.thblckjkr.aniforum.R;
 import tk.thblckjkr.aniforum.models.ForumPosts;
-import tk.thblckjkr.aniforum.models.OnResult;
 import tk.thblckjkr.aniforum.ui.post.ViewPostActivity;
 
 public class ForumPostRecyclerViewAdapter extends RecyclerView.Adapter<ForumPostRecyclerViewAdapter.ViewHolder> {
@@ -71,8 +68,11 @@ public class ForumPostRecyclerViewAdapter extends RecyclerView.Adapter<ForumPost
         holder.mButtonView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 final Intent intent;
-                Log.e("Click", "On click on view" + mPosts.posts().get(position).id);
+//                Log.e("Click", "On click on view" + mPosts.posts().get(position).id);
+
                 intent =  new Intent(v.getContext(), ViewPostActivity.class);
+                intent.putExtra("postId", mPosts.posts().get(position).id); //Your id
+
                 v.getContext().startActivity(intent);
             }
         });
@@ -114,7 +114,7 @@ public class ForumPostRecyclerViewAdapter extends RecyclerView.Adapter<ForumPost
 
             mPostTitleView = (TextView) view.findViewById(R.id.post_title);
             mPostBodyView = (TextView) view.findViewById(R.id.post_body);
-            mPostUserView = (TextView) view.findViewById(R.id.post_author);
+            mPostUserView = (TextView) view.findViewById(R.id.post_author_viewComments);
             mPostImage = (ImageView) view.findViewById(R.id.post_image);
             mPostUserAvatar = (ImageView) view.findViewById(R.id.user_avatar);
             mButtonView = (Button) view.findViewById(R.id.post_view_button);

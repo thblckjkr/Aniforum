@@ -1,29 +1,21 @@
-query getForumPost($threadId:Int!) {
+query getForumPost($threadId:Int!, $page:Int!) {
   Thread(id: $threadId) {
-    id
-    title
-    body
-    userId
-    replyCount
-    viewCount
-    isLocked
-    isSticky
-    isSubscribed
-    isLiked
-    likeCount
-    repliedAt
+    id title body
+    userId replyCount viewCount
+    isLocked isSticky isSubscribed
+    isLiked likeCount repliedAt
     createdAt
+
     user {
-      id
-      name
-      avatar {
-        large
+      id name avatar {
+        medium
       }
     }
+
     categories {
-      id
-      name
+      id name
     }
+
     mediaCategories {
       id
       title {
@@ -34,6 +26,19 @@ query getForumPost($threadId:Int!) {
       }
       type
       format
+    }
+  }
+  Page(page: $page, perPage: 15) {
+    pageInfo {
+      total perPage currentPage lastPage hasNextPage
+    }
+    threadComments(threadId: $threadId) {
+      id threadId comment isLiked likeCount createdAt user {
+        id name donatorTier donatorBadge moderatorStatus avatar {
+          large
+        }
+      }
+      childComments
     }
   }
 }
