@@ -1,5 +1,6 @@
 # Aniforum for anilist
 
+> Abandoned project. I still think it could work well as a concept, but I don't have the time to make it work.
 
 Query para ver un post de un foro
 ```graphql
